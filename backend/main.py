@@ -1,4 +1,6 @@
+import plotly.express as px
 import streamlit as st
+import pandas as pd
 import serial
 import time
 import init_db
@@ -15,10 +17,23 @@ if 'temperature' not in st.session_state:
 
 humidity_placeholder = st.empty()
 temperature_placeholder = st.empty()
+graph_placeholder_temp = st.empty()
+graph_placeholder_hum = st.empty()
 
 # Function to insert data into the database
 def insert_into_database(humidity, temperature):
     init_db.insert_data("sensor.db", humidity, temperature)
+
+# Function to fetch and display data from the database
+def display_data():
+    df = init_db.fetch_all_data("sensor.db")
+    if not df.empty:
+        fig_temp = px.line(df, x='timestamp', y='temperature', title='Temperature Over Time')
+        fig_hum = px.line(df, x='timestamp', y='humidity', title='Humidity Over Time')
+        graph_placeholder_temp.plotly_chart(fig_temp)
+        graph_placeholder_hum.plotly_chart(fig_hum)
+    else:
+        st.write("No data available in the database.")
 
 # Main loop to update the Streamlit display
 def main():
@@ -39,6 +54,7 @@ def main():
 
         humidity_placeholder.text(st.session_state.humidity)
         temperature_placeholder.text(st.session_state.temperature)
+        display_data()
         time.sleep(1)  # Adjust the sleep time as needed
 
 if __name__ == "__main__":
