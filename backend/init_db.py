@@ -1,4 +1,5 @@
 import sqlite3
+import pandas as pd
 from datetime import datetime, timedelta
 
 def create_sqlite_database(filename):
@@ -56,7 +57,14 @@ def delete_old_data(filename):
         if conn:
             conn.close()
 
+def fetch_all_data(db_name):
+    conn = sqlite3.connect(db_name)
+    query = "SELECT * FROM DH11"
+    df = pd.read_sql_query(query, conn)
+    conn.close()
+    return df
+
 if __name__ == '__main__':
     create_sqlite_database("sensor.db")
     delete_old_data("sensor.db")
-    insert_data("sensor.db", 55, 22)
+    #insert_data("sensor.db", 55, 22)
