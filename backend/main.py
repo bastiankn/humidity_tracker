@@ -5,7 +5,6 @@ import serial
 import time
 import init_db
 
-
 # Setup Streamlit
 st.title("DHT11 Sensor Data")
 
@@ -39,18 +38,33 @@ def display_data():
 def main():
     serial_port = 'COM3'  # Adjust to your actual serial port
     ser = serial.Serial(serial_port, 9600, timeout=1)
+    insert_data = False
     while True:
         line = ser.readline().decode().strip()
         if "Humidity" in line:
             new_humidity = line
             if new_humidity != st.session_state.humidity:
                 st.session_state.humidity = new_humidity
-                insert_into_database(st.session_state.humidity.split(': ')[1], st.session_state.temperature.split(': ')[1])
+                insert_data = True
+            else:
+                insert_data = False
         elif "Temperature" in line:
             new_temperature = line
             if new_temperature != st.session_state.temperature:
                 st.session_state.temperature = new_temperature
-                insert_into_database(st.session_state.humidity.split(': ')[1], st.session_state.temperature.split(': ')[1])
+                insert_data = True
+            else:
+                insert_data = False
+
+        # Check if both humidity and temperature are valid before inserting into the database
+        if insert_data:
+            try:
+                humidity_value = float(st.session_state.humidity.split(': ')[1])
+                temperature_value = float(st.session_state.temperature.split(': ')[1])
+                insert_into_database(humidity_value, temperature_value)
+            except ValueError:
+                # Skip insertion if values are not valid numbers
+                pass
 
         humidity_placeholder.text(st.session_state.humidity)
         temperature_placeholder.text(st.session_state.temperature)
