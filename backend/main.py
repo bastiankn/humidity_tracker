@@ -19,12 +19,20 @@ temperature_placeholder = st.empty()
 graph_placeholder_temp = st.empty()
 graph_placeholder_hum = st.empty()
 
-# Function to insert data into the database
 def insert_into_database(humidity, temperature):
+    """
+    Inserts humidity and temperature data into the SQLite database.
+
+    Parameters:
+    - humidity (float): Humidity value in percentage.
+    - temperature (float): Temperature value in Celsius.
+    """
     init_db.insert_data("sensor.db", humidity, temperature)
 
-# Function to fetch and display data from the database
 def display_data():
+    """
+    Fetches data from the SQLite database and displays it using Plotly charts.
+    """
     df = init_db.fetch_all_data("sensor.db")
     if not df.empty:
         fig_temp = px.line(df, x='timestamp', y='temperature', title='Temperature Over Time')
@@ -34,11 +42,14 @@ def display_data():
     else:
         st.write("No data available in the database.")
 
-# Main loop to update the Streamlit display
 def main():
+    """
+    Main function to continuously read data from the serial port,
+    update Streamlit display, and insert data into the database.
+    """
     serial_port = 'COM3'  # Adjust to your actual serial port
     ser = serial.Serial(serial_port, 9600, timeout=1)
-    insert_data = False
+    insert_data = True
     while True:
         line = ser.readline().decode().strip()
         if "Humidity" in line:
@@ -56,15 +67,13 @@ def main():
             else:
                 insert_data = False
 
-        # Check if both humidity and temperature are valid before inserting into the database
         if insert_data:
             try:
                 humidity_value = float(st.session_state.humidity.split(': ')[1])
                 temperature_value = float(st.session_state.temperature.split(': ')[1])
                 insert_into_database(humidity_value, temperature_value)
             except ValueError:
-                # Skip insertion if values are not valid numbers
-                pass
+                pass 
 
         humidity_placeholder.text(st.session_state.humidity)
         temperature_placeholder.text(st.session_state.temperature)
