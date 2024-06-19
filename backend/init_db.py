@@ -1,7 +1,6 @@
 import sqlite3
 import pandas as pd
 from datetime import datetime, timedelta
-import os
 
 # Construct the path to the database file in the backend directory
 db_filename = "backend/sensor.db"
