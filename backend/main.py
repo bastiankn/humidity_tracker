@@ -38,7 +38,7 @@ def display_data():
 def main():
     serial_port = 'COM3'  # Adjust to your actual serial port
     ser = serial.Serial(serial_port, 9600, timeout=1)
-    insert_data = False
+    insert_data = True
     while True:
         line = ser.readline().decode().strip()
         if "Humidity" in line:
