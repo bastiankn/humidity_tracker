@@ -1,4 +1,4 @@
-streamlit
-pyserial
 pandas
 plotly
+streamlit
+pyserial
