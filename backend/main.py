@@ -47,7 +47,7 @@ def main():
     Main function to continuously read data from the serial port,
     update Streamlit display, and insert data into the database.
     """
-    serial_port = 'COM3'  # Adjust to your actual serial port
+    serial_port = '/dev/ttyACM0'  # Adjust to your actual serial port
     ser = serial.Serial(serial_port, 9600, timeout=1)
     insert_data = True
     while True:
