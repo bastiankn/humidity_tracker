@@ -78,7 +78,7 @@ def main():
         humidity_placeholder.text(st.session_state.humidity)
         temperature_placeholder.text(st.session_state.temperature)
         display_data()
-        time.sleep(1)  # Adjust the sleep time as needed
+        time.sleep(30)  # Adjust the sleep time as needed
 
 if __name__ == "__main__":
     main()
