@@ -72,16 +72,13 @@ def main():
                 insert_data = False
 
         if insert_data:
-            print(current_time, new_humidity, new_temperature)
             try:
                 humidity_value = float(st.session_state.humidity.split(': ')[1])
                 temperature_value = float(st.session_state.temperature.split(': ')[1])
                 insert_into_database(humidity_value, temperature_value)
             except ValueError:
                 pass 
-        else:
-            print(current_time, new_humidity, new_temperature)
-
+    
         humidity_placeholder.text(st.session_state.humidity)
         temperature_placeholder.text(st.session_state.temperature)
         display_data()
