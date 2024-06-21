@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import serial
 import time
+from datetime import datetime
 import init_db
 
 # Setup Streamlit
@@ -51,9 +52,11 @@ def main():
     ser = serial.Serial(serial_port, 9600, timeout=1)
     insert_data = True
     while True:
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         line = ser.readline().decode().strip()
         if "Humidity" in line:
             new_humidity = line
+            print(current_time, new_humidity)
             if new_humidity != st.session_state.humidity:
                 st.session_state.humidity = new_humidity
                 insert_data = True
@@ -61,6 +64,7 @@ def main():
                 insert_data = False
         elif "Temperature" in line:
             new_temperature = line
+            print(current_time, new_temperature)
             if new_temperature != st.session_state.temperature:
                 st.session_state.temperature = new_temperature
                 insert_data = True
