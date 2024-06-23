@@ -6,9 +6,6 @@ import time
 from datetime import datetime
 import init_db
 
-# Delete older than 24hrs records
-init_db.delete_old_data("backend/sensor.db")
-
 # Setup Streamlit
 st.title("DHT11 Sensor Data")
 
@@ -51,7 +48,7 @@ def main():
     Main function to continuously read data from the serial port,
     update Streamlit display, and insert data into the database.
     """
-    init_db.delete_old_data("backend/sensor.db")
+    init_db.delete_old_data("sensor.db")
     serial_port = '/dev/ttyACM0'  # Adjust to your actual serial port
     ser = serial.Serial(serial_port, 9600, timeout=1)
     insert_data = True
