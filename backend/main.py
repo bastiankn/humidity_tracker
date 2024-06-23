@@ -6,6 +6,9 @@ import time
 from datetime import datetime
 import init_db
 
+# Delete older than 24hrs records
+init_db.delete_old_data("backend/sensor.db")
+
 # Setup Streamlit
 st.title("DHT11 Sensor Data")
 
@@ -83,7 +86,7 @@ def main():
         humidity_placeholder.text(st.session_state.humidity)
         temperature_placeholder.text(st.session_state.temperature)
         display_data()
-        time.sleep(30)  # Adjust the sleep time as needed
+        time.sleep(15)  # Adjust the sleep time as needed
 
 if __name__ == "__main__":
     main()
