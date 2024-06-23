@@ -54,6 +54,7 @@ def delete_old_data(filename):
             WHERE timestamp <= datetime('now', '-1 day')
         ''')
         conn.commit()
+        print("Deleted old records")
     except sqlite3.Error as e:
         print(e)
     finally:
