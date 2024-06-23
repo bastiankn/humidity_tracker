@@ -1,6 +1,5 @@
 import sqlite3
 import pandas as pd
-from datetime import datetime, timedelta
 
 # Construct the path to the database file in the backend directory
 db_filename = "backend/sensor.db"
@@ -33,8 +32,8 @@ def insert_data(filename, humidity, temperature):
         conn = sqlite3.connect(filename)
         c = conn.cursor()
         c.execute('''
-            INSERT INTO DH11 (humidity, temperature)
-            VALUES (?, ?)
+            INSERT INTO DH11 (humidity, temperature, timestamp)
+            VALUES (?, ?, datetime('now'))
         ''', (humidity, temperature))
         conn.commit()
     except sqlite3.Error as e:
